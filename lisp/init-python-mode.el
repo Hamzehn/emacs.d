@@ -1,3 +1,7 @@
+;; Elpy for Python
+(require-package 'elpy)
+(elpy-enable)
+
 (setq auto-mode-alist
       (append '(("SConstruct\\'" . python-mode)
                 ("SConscript\\'" . python-mode))
@@ -13,6 +17,5 @@
     (after-load 'company
       (add-hook 'python-mode-hook
                 (lambda () (sanityinc/local-push-company-backend 'company-anaconda))))))
-
 
 (provide 'init-python-mode)
