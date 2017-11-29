@@ -51,7 +51,6 @@
 
 (require 'init-frame-hooks)
 (require 'init-xterm)
-(require 'init-themes)
 (require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-dired)
@@ -67,12 +66,12 @@
 (require 'init-hippie-expand)
 (require 'init-company)
 (require 'init-windows)
-(require 'init-sessions)
 (require 'init-fonts)
 (require 'init-mmm)
 
 (require 'init-editing-utils)
 (require 'init-whitespace)
+(require 'init-fci)
 
 (require 'init-vc)
 (require 'init-darcs)
@@ -162,6 +161,10 @@
 (when (maybe-require-package 'uptimes)
   (add-hook 'after-init-hook (lambda () (require 'uptimes))))
 
+(require 'init-themes)
+;; Moved this to the end because it was causing startup errors regarding linum
+;; variables not being defined
+(require 'init-sessions)
 
 (provide 'init)
 

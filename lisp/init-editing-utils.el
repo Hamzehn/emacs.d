@@ -77,6 +77,12 @@
 
 (unless (fboundp 'display-line-numbers-mode)
   (require-package 'nlinum))
+(add-hook 'prog-mode-hook '(lambda () (nlinum-mode t)))
+(setq nlinum-format "%d ")
+(setq nlinum-highlight-current-line t)
+
+;; Highlight current line
+(global-hl-line-mode 1)
 
 
 (when (require-package 'rainbow-delimiters)
