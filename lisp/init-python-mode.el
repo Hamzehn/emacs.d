@@ -2,6 +2,17 @@
 (require-package 'elpy)
 (elpy-enable)
 
+;; ---------------------------------
+;; Emacs IPython Notebook EIN config
+;; ---------------------------------
+(require-package 'ein)
+;; use autocompletion, but don't start to autocomplete after a dot
+(setq ein:complete-on-dot -1)
+(setq ein:use-auto-complete t)
+
+;; timeout settings
+(setq ein:query-timeout 1000)
+
 (setq auto-mode-alist
       (append '(("SConstruct\\'" . python-mode)
                 ("SConscript\\'" . python-mode))

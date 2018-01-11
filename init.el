@@ -95,6 +95,7 @@
 (require 'init-haml)
 (require 'init-http)
 (require 'init-python-mode)
+(require 'init-octave)
 (require 'init-haskell)
 (require 'init-elm)
 (require 'init-ruby-mode)
