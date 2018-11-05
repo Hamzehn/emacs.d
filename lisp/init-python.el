@@ -26,7 +26,7 @@
     (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
   (when (maybe-require-package 'company-anaconda)
     (after-load 'company
-      (add-hook 'python-mode-hook
-                (lambda () (sanityinc/local-push-company-backend 'company-anaconda))))))
+      (after-load 'python
+        (push 'company-anaconda company-backends)))))
 
-(provide 'init-python-mode)
+(provide 'init-python)

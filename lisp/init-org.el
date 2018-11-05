@@ -1,4 +1,3 @@
-(maybe-require-package 'org-fstree)
 (when *is-a-mac*
   (maybe-require-package 'grab-mac-link))
 
@@ -10,7 +9,6 @@
 ;; Various preferences
 (setq org-log-done t
       org-edit-timestamp-down-means-later t
-      org-archive-mark-done nil
       org-hide-emphasis-markers t
       org-catch-invisible-edits 'show
       org-export-coding-system 'utf-8
@@ -22,10 +20,11 @@
 
 ;; Lots of stuff from http://doc.norang.ca/org-mode.html
 
+;; TODO: fail gracefully
 (defun sanityinc/grab-ditaa (url jar-name)
   "Download URL and extract JAR-NAME as `org-ditaa-jar-path'."
   ;; TODO: handle errors
-  (message "Grabbing " jar-name " for org.")
+  (message "Grabbing %s for org." jar-name)
   (let ((zip-temp (make-temp-name "emacs-ditaa")))
     (unwind-protect
         (progn
@@ -54,6 +53,11 @@
       (url-copy-file url org-plantuml-jar-path))))
 
 
+;; Re-align tags when window shape changes
+(after-load 'org-agenda
+  (add-hook 'org-agenda-mode-hook
+            (lambda () (add-hook 'window-configuration-change-hook 'org-agenda-align-tags nil t))))
+
 
 
 
@@ -78,12 +82,17 @@ typical word processor."
         ;;(delete-selection-mode 1)
         (set (make-local-variable 'blink-cursor-interval) 0.6)
         (set (make-local-variable 'show-trailing-whitespace) nil)
+        (set (make-local-variable 'line-spacing) 0.2)
+        (set (make-local-variable 'electric-pair-mode) nil)
         (ignore-errors (flyspell-mode 1))
         (visual-line-mode 1))
     (kill-local-variable 'truncate-lines)
     (kill-local-variable 'word-wrap)
     (kill-local-variable 'cursor-type)
+    (kill-local-variable 'blink-cursor-interval)
     (kill-local-variable 'show-trailing-whitespace)
+    (kill-local-variable 'line-spacing)
+    (kill-local-variable 'electric-pair-mode)
     (buffer-face-mode -1)
     ;; (delete-selection-mode -1)
     (flyspell-mode -1)
@@ -119,9 +128,7 @@ typical word processor."
 (after-load 'org-agenda
   (add-to-list 'org-agenda-after-show-hook 'org-show-entry))
 
-(defadvice org-refile (after sanityinc/save-all-after-refile activate)
-  "Save all org buffers after each refile operation."
-  (org-save-all-org-buffers))
+(advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
 
 ;; Exclude DONE state tasks from refile targets
 (defun sanityinc/verify-refile-target ()
@@ -304,18 +311,6 @@ typical word processor."
 
 
 
-;; Remove empty LOGBOOK drawers on clock out
-(defun sanityinc/remove-empty-drawer-on-clock-out ()
-  (interactive)
-  (save-excursion
-    (beginning-of-line 0)
-    (org-remove-empty-drawer-at "LOGBOOK" (point))))
-
-(after-load 'org-clock
-  (add-hook 'org-clock-out-hook 'sanityinc/remove-empty-drawer-on-clock-out 'append))
-
-
-
 ;; TODO: warn about inconsistent items, e.g. TODO inside non-PROJECT
 ;; TODO: nested projects!
 
