@@ -1,5 +1,10 @@
 ;; Themes
 
+(setenv "WORKON_HOME" "/opt/anaconda/envs")
+
+(setq eldoc-idle-delay 1)  ;; in second
+(setq auto-window-vscroll nil)
+
 ;; show the menu bar
 (menu-bar-mode 1)
 
