@@ -5,6 +5,18 @@
 (setq eldoc-idle-delay 1)  ;; in second
 (setq auto-window-vscroll nil)
 
+;; use git bash shell on windows
+(if (eq system-type 'windows-nt)
+    (progn
+      (setq explicit-shell-file-name "c:/Program Files/Git/bin/bash.exe")
+      (setq shell-file-name explicit-shell-file-name)
+      (setq explicit-sh.exe-args '("--login" "-i"))
+      (add-to-list 'exec-path "c:/Program Files/Git/bin/bash.exe")
+      (setenv "SHELL" shell-file-name)
+      (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+      )
+  )
+
 ;; show the menu bar
 (menu-bar-mode 1)
 
