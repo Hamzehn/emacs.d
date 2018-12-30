@@ -1,5 +1,6 @@
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
+(maybe-require-package 'rjsx-mode)
 (maybe-require-package 'coffee-mode)
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
@@ -42,6 +43,24 @@
 
   (js2-imenu-extras-setup))
 
+;; disable jshint since we prefer eslint checking
+;; http://codewinds.com/blog/2015-04-02-emacs-flycheck-eslint-jsx.html
+(setq-default flycheck-disabled-checkers
+              (append flycheck-disabled-checkers
+                      '(javascript-jshint)))
+
+;; use local eslint from node_modules before global
+;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
+(defun my/use-eslint-from-node-modules ()
+  (let* ((root (locate-dominating-file
+                (or (buffer-file-name) default-directory)
+                "node_modules"))
+         (eslint (and root
+                      (expand-file-name "node_modules/.bin/eslint"
+                                        root))))
+    (when (and eslint (file-executable-p eslint))
+      (setq-local flycheck-javascript-eslint-executable eslint))))
+(add-hook 'flycheck-mode-hook #'my/use-eslint-from-node-modules)
 ;; js-mode
 (setq-default js-indent-level preferred-javascript-indent-level)
 
