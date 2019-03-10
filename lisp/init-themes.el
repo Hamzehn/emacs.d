@@ -44,6 +44,10 @@
                     :height (face-attribute 'default :height))
 (set-face-attribute 'doom-neotree-file-face nil
                     :foreground (face-attribute 'default :foreground))
+
+;; Enable file icons in neotree
+(setq doom-neotree-enable-file-icons t)
+
 ;; To easily show/hide the neotree drawer
 (global-set-key [f8] 'neotree-toggle)
 

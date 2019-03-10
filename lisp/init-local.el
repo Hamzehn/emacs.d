@@ -1,6 +1,6 @@
 ;; Themes
 
-(setenv "WORKON_HOME" "/opt/anaconda/envs")
+;;(setenv "WORKON_HOME" "/opt/anaconda/envs")
 
 (setq eldoc-idle-delay 1)  ;; in second
 (setq auto-window-vscroll nil)
@@ -16,6 +16,21 @@
       (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
       )
   )
+
+;; From: https://www.emacswiki.org/emacs/DiredSortDirectoriesFirst
+;; Sort dired listings with directories first
+(defun mydired-sort ()
+  "Sort dired listings with directories first."
+  (save-excursion
+    (let (buffer-read-only)
+      (forward-line 2) ;; beyond dir. header
+      (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max)))
+    (set-buffer-modified-p nil)))
+
+(defadvice dired-readin
+    (after dired-after-updating-hook first () activate)
+  "Sort dired listings with directories first before adding marks."
+  (mydired-sort))
 
 ;; show the menu bar
 (menu-bar-mode 1)

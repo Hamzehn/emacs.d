@@ -6,11 +6,11 @@
 (maybe-require-package 'prettier-js)
 
 (defcustom preferred-javascript-mode
-  (first (remove-if-not #'fboundp '(js2-mode js-mode)))
+  (first (remove-if-not #'fboundp '(rjsx-mode js2-mode js-mode)))
   "Javascript mode to use for .js files."
   :type 'symbol
   :group 'programming
-  :options '(js2-mode js-mode))
+  :options '(rjsx-mode js2-mode js-mode))
 
 (defconst preferred-javascript-indent-level 2)
 
@@ -42,12 +42,6 @@
   (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS2")))
 
   (js2-imenu-extras-setup))
-
-;; disable jshint since we prefer eslint checking
-;; http://codewinds.com/blog/2015-04-02-emacs-flycheck-eslint-jsx.html
-(setq-default flycheck-disabled-checkers
-              (append flycheck-disabled-checkers
-                      '(javascript-jshint)))
 
 ;; use local eslint from node_modules before global
 ;; http://emacs.stackexchange.com/questions/21205/flycheck-with-file-relative-eslint-executable
