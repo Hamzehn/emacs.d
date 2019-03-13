@@ -1,6 +1,7 @@
 ;; Elpy for Python
 (require-package 'elpy)
 (elpy-enable)
+(remove-hook 'elpy-modules 'elpy-module-flymake)
 
 ;; ---------------------------------
 ;; Emacs IPython Notebook EIN config
