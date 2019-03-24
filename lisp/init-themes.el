@@ -48,8 +48,22 @@
 ;; Enable file icons in neotree
 (setq doom-neotree-enable-file-icons t)
 
+;; Open NeoTree with the help of projectile
+(defun neotree-project-dir ()
+  "Open NeoTree using the git root."
+  (interactive)
+  (let ((project-dir (projectile-project-root))
+        (file-name (buffer-file-name)))
+    (neotree-toggle)
+    (if project-dir
+        (if (neo-global--window-exists-p)
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name)))
+      (message "Could not find git project root."))))
+
 ;; To easily show/hide the neotree drawer
-(global-set-key [f8] 'neotree-toggle)
+(global-set-key [f8] 'neotree-project-dir)
 
 ;; Don't show the neotree drawer when in ediff mode
 (add-hook 'ediff-before-setup-windows-hook 'neotree-hide)
