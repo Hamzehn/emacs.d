@@ -49,3 +49,6 @@ site-lisp/package/
 /plantuml.jar
 /request/
 /magithub
+.cache/
+/forge-database.sqlite
+/transient

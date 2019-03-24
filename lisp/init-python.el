@@ -1,3 +1,7 @@
+;;; init-python.el --- Python editing -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
 ;; Elpy for Python
 (require-package 'elpy)
 (elpy-enable)
@@ -31,3 +35,4 @@
         (push 'company-anaconda company-backends)))))
 
 (provide 'init-python)
+;;; init-python.el ends here
