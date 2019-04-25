@@ -33,6 +33,9 @@
 
 (require-package 'pip-requirements)
 
+;; Change the virtual environment according to the project
+;; Use .dir-locals.el files to set directory specific virtual environments
+(pyvenv-tracking-mode)
 
 (provide 'init-python)
 ;;; init-python.el ends here
