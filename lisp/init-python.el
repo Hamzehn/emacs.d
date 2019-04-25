@@ -5,7 +5,15 @@
 ;; Elpy for Python
 (require-package 'elpy)
 (elpy-enable)
-(remove-hook 'elpy-modules 'elpy-module-flymake)
+;; (when (require 'flycheck nil t)
+(when (maybe-require-package 'flycheck)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+;;(remove-hook 'elpy-modules 'elpy-module-flymake)
+
+;; Autopep8
+;; (require-package 'py-autopep8)
+;; (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
 
 ;; ---------------------------------
 ;; Emacs IPython Notebook EIN config
@@ -25,14 +33,6 @@
 
 (require-package 'pip-requirements)
 
-(when (maybe-require-package 'anaconda-mode)
-  (after-load 'python
-    (add-hook 'python-mode-hook 'anaconda-mode)
-    (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
-  (when (maybe-require-package 'company-anaconda)
-    (after-load 'company
-      (after-load 'python
-        (push 'company-anaconda company-backends)))))
 
 (provide 'init-python)
 ;;; init-python.el ends here
