@@ -48,4 +48,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "DejaVu Sans Mono" :foundry "outline" :slant normal :weight normal :height 105 :width normal)))))
 
+;; Increase the left fringe by 1px to properly show diff-hl mode markers in right window
+(add-to-list 'default-frame-alist '(left-fringe . 9))
+
 (provide 'init-local)
