@@ -3,8 +3,6 @@
 ;;; Code:
 
 (require-package 'doom-themes)
-(require-package 'neotree)
-(require-package 'all-the-icons)
 
 ;; If you don't customize it, this is the theme you get.
 (setq-default custom-enabled-themes '(doom-vibrant))
@@ -14,7 +12,7 @@
   "Forcibly load the themes listed in `custom-enabled-themes'."
   (dolist (theme custom-enabled-themes)
     (unless (custom-theme-p theme)
-      (load-theme theme)))
+      (load-theme theme t)))
   (custom-set-variables `(custom-enabled-themes
                           (quote ,custom-enabled-themes))))
 
@@ -35,42 +33,6 @@
 
 ;; Enable flashing mode-line on errors
 (doom-themes-visual-bell-config)
-
-;; Enable custom neotree theme
-(doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
-;; Neotree Doom Theme Customizations
-(setq doom-neotree-enable-variable-pitch t
-      doom-neotree-line-spacing nil
-      neo-show-hidden-files t)
-(set-face-attribute 'doom-neotree-dir-face nil
-                    :height (face-attribute 'default :height))
-(set-face-attribute 'doom-neotree-file-face nil
-                    :height (face-attribute 'default :height))
-(set-face-attribute 'doom-neotree-file-face nil
-                    :foreground (face-attribute 'default :foreground))
-
-;; Enable file icons in neotree
-(setq doom-neotree-enable-file-icons t)
-
-;; Open NeoTree with the help of projectile
-(defun neotree-project-dir ()
-  "Open NeoTree using the git root."
-  (interactive)
-  (let ((project-dir (projectile-project-root))
-        (file-name (buffer-file-name)))
-    (neotree-toggle)
-    (if project-dir
-        (if (neo-global--window-exists-p)
-            (progn
-              (neotree-dir project-dir)
-              (neotree-find file-name)))
-      (message "Could not find git project root."))))
-
-;; To easily show/hide the neotree drawer
-(global-set-key [f8] 'neotree-project-dir)
-
-;; Don't show the neotree drawer when in ediff mode
-(add-hook 'ediff-before-setup-windows-hook 'neotree-hide)
 
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
@@ -113,9 +75,16 @@
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
   (add-hook 'after-init-hook 'dimmer-mode)
-  ;; TODO: file upstream as a PR
-  (after-load 'dimmer
-    (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))))
+  (with-eval-after-load 'dimmer
+    ;; TODO: file upstream as a PR
+    (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all))))
+  (with-eval-after-load 'dimmer
+    ;; Don't dim in terminal windows. Even with 256 colours it can
+    ;; lead to poor contrast.  Better would be to vary dimmer-fraction
+    ;; according to frame type.
+    (defun sanityinc/display-non-graphic-p ()
+      (not (display-graphic-p)))
+    (add-to-list 'dimmer-exclusion-predicates 'sanityinc/display-non-graphic-p)))
 
 
 (provide 'init-themes)

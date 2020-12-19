@@ -36,9 +36,9 @@
 (menu-bar-mode 1)
 
 ;; Setup frame size and windows
-(add-to-list 'default-frame-alist '(top . 5))
-(add-to-list 'default-frame-alist '(right . 200))
-(add-to-list 'default-frame-alist '(height . 60))
+(add-to-list 'default-frame-alist '(top . 40))
+(add-to-list 'default-frame-alist '(left . (+ 20)))
+(add-to-list 'default-frame-alist '(height . 56))
 (add-to-list 'default-frame-alist '(width . 200))
 ;; Set the font
 (custom-set-faces

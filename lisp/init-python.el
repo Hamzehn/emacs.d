@@ -31,11 +31,9 @@
                 ("SConscript\\'" . python-mode))
               auto-mode-alist))
 
-(require-package 'pip-requirements)
+(setq python-shell-interpreter "python3")
 
-;; Change the virtual environment according to the project
-;; Use .dir-locals.el files to set directory specific virtual environments
-(pyvenv-tracking-mode)
+(require-package 'pip-requirements)
 
 (provide 'init-python)
 ;;; init-python.el ends here
