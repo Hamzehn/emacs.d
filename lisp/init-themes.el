@@ -2,19 +2,24 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Solaire mode must be activated before loading themes
+(require-package 'solaire-mode)
+;; Ensure solaire-mode is running in all solaire-mode buffers
+(add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
+;; if you use auto-revert-mode, this prevents solaire-mode from turning
+;; itself off every time Emacs reverts the file
+(add-hook 'after-revert-hook #'turn-on-solaire-mode)
+;; To enable solaire-mode unconditionally for certain modes:
+(add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
+;; Highlight the minibuffer when it is activated:
+(add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+(solaire-global-mode +1)
+
+;; Now we can load our theme (Doom)
 (require-package 'doom-themes)
 
 ;; If you don't customize it, this is the theme you get.
 (setq-default custom-enabled-themes '(doom-vibrant))
-
-;; Ensure that themes will be applied even if they have not been customized
-(defun reapply-themes ()
-  "Forcibly load the themes listed in `custom-enabled-themes'."
-  (dolist (theme custom-enabled-themes)
-    (unless (custom-theme-p theme)
-      (load-theme theme t)))
-  (custom-set-variables `(custom-enabled-themes
-                          (quote ,custom-enabled-themes))))
 
 ;; Global settings (defaults)
 (setq doom-themes-enable-bold t     ; if nil, bold is universally disabled
@@ -37,30 +42,22 @@
 ;; Corrects (and improves) org-mode's native fontification.
 (doom-themes-org-config)
 
-;; brighten buffers (that represent real files)
-(require-package 'solaire-mode)
-(add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
-
-;; To enable solaire-mode unconditionally for certain modes:
-(add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
-
-;; ...if you use auto-revert-mode:
-(add-hook 'after-revert-hook #'turn-on-solaire-mode)
-
-;; highlight the minibuffer when it is activated:
-(add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
-
-;; if the bright and dark background colors are the wrong way around, use this
-;; to switch the backgrounds of the `default` and `solaire-default-face` faces.
-;; This should be used *after* you load the active theme!
-
 ;;-----------------------------------------------------------------------------
 ;; Toggle between light and dark
 ;;-----------------------------------------------------------------------------
+;; Ensure that themes will be applied even if they have not been customized
+(defun reapply-themes ()
+  "Forcibly load the themes listed in `custom-enabled-themes'."
+  (dolist (theme custom-enabled-themes)
+    (unless (custom-theme-p theme)
+      (load-theme theme t)))
+  (custom-set-variables `(custom-enabled-themes
+                          (quote ,custom-enabled-themes))))
 (defun light ()
   "Activate a light color theme."
   (interactive)
   (setq custom-enabled-themes '(doom-one-light))
+  (set-mouse-color "dark grey")
   (reapply-themes)
   (solaire-mode-swap-bg))
 
@@ -68,6 +65,7 @@
   "Activate a dark color theme."
   (interactive)
   (setq custom-enabled-themes '(doom-vibrant))
+  (set-mouse-color "dark grey")
   (reapply-themes))
 
 (add-hook 'after-init-hook 'dark)
