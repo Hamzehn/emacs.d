@@ -1,6 +1,8 @@
 ;; Fill column indicator
 (require-package 'fill-column-indicator)
 (defun sanityinc/prog-mode-fci-settings ()
+  (setq display-fill-column-indicator nil)
+  (setq indicate-buffer-boundaries 'left)
   (setq fci-rule-column 79)
   (setq fci-rule-color "#363C46")
   (turn-on-fci-mode)
