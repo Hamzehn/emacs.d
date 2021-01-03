@@ -8,13 +8,12 @@
 (maybe-require-package 'coffee-mode)
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
-(require 'cl)
 
 
 ;;; Basic js-mode setup
 
 (defcustom preferred-javascript-mode
-  (first (remove-if-not #'fboundp '(rjsx-mode js2-mode js-mode)))
+  (cl-first (cl-remove-if-not #'fboundp '(rjsx-mode js2-mode js-mode)))
   "Javascript mode to use for .js files."
   :type 'symbol
   :group 'programming
@@ -24,9 +23,9 @@
 ;; may be in an arbitrary order
 
 (setq auto-mode-alist (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
-                            (loop for entry in auto-mode-alist
-                                  unless (eq preferred-javascript-mode (cdr entry))
-                                  collect entry)))
+                            (cl-loop for entry in auto-mode-alist
+                                     unless (eq preferred-javascript-mode (cdr entry))
+                                     collect entry)))
 
 
 (add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
