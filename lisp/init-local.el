@@ -40,13 +40,14 @@
 (add-to-list 'default-frame-alist '(left . (+ 20)))
 (add-to-list 'default-frame-alist '(height . 56))
 (add-to-list 'default-frame-alist '(width . 200))
-;; Set the font
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "outline" :slant normal :weight normal :height 105 :width normal)))))
+
+;; Set the default font
+(when (member "DejaVu Sans Mono" (font-family-list))
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono" :slant 'normal
+                      :weight 'normal :height 105 :width 'normal))
+;; specify font for all unicode characters
+(when (member "Symbola" (font-family-list))
+  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
 
 ;; Increase the left fringe by 1px to properly show diff-hl mode markers in right window
 (add-to-list 'default-frame-alist '(left-fringe . 9))
