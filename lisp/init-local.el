@@ -2,7 +2,11 @@
 
 ;;(setenv "WORKON_HOME" "/opt/anaconda/envs")
 
-(setq eldoc-idle-delay 1)  ;; in second
+(with-eval-after-load 'eldoc-mode
+  (defun my/eldoc-mode-hook ()
+    (setq eldoc-idle-delay 0.5))
+  (add-hook 'eldoc-mode-hook 'my/eldoc-mode-hook))
+
 (setq auto-window-vscroll nil)
 
 ;; use git bash shell on windows
