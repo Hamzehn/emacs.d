@@ -66,12 +66,12 @@
 
 
 
-(require 'beacon)
 (when (maybe-require-package 'beacon)
   (setq-default beacon-lighter "")
   (setq-default beacon-size 20)
   ;; Disable the cursor beacon in shell mode (causes errors for some reason)
-  (add-to-list 'beacon-dont-blink-major-modes 'shell-mode)
+  (with-eval-after-load 'beacon-mode
+    (add-to-list 'beacon-dont-blink-major-modes 'shell-mode))
   (add-hook 'after-init-hook 'beacon-mode))
 
 
