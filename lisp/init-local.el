@@ -56,4 +56,7 @@
 ;; Increase the left fringe by 1px to properly show diff-hl mode markers in right window
 (add-to-list 'default-frame-alist '(left-fringe . 9))
 
+;; Select the displayed help window by default
+(setq help-window-select t)
+
 (provide 'init-local)
