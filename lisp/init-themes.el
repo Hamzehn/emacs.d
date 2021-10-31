@@ -10,9 +10,7 @@
 ;; itself off every time Emacs reverts the file
 (add-hook 'after-revert-hook #'turn-on-solaire-mode)
 ;; To enable solaire-mode unconditionally for certain modes:
-(add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
-;; Highlight the minibuffer when it is activated:
-(add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+(add-hook 'ediff-prepare-buffer-hook #'turn-on-solaire-mode)
 (solaire-global-mode +1)
 
 ;; Now we can load our theme (Doom)
@@ -53,6 +51,13 @@
       (load-theme theme t)))
   (custom-set-variables `(custom-enabled-themes
                           (quote ,custom-enabled-themes))))
+
+(add-hook 'after-init-hook 'reapply-themes)
+
+
+
+;; Toggle between light and dark
+
 (defun light ()
   "Activate a light color theme."
   (interactive)
