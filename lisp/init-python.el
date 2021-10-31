@@ -7,7 +7,8 @@
                 ("SConscript\\'" . python-mode))
               auto-mode-alist))
 
-(setq python-shell-interpreter "python3")
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "--simple-prompt -i")
 
 ;; Use Elpy for Python (alternative would be anaconda-mode)
 (when (maybe-require-package 'elpy)
@@ -18,12 +19,15 @@
     (add-hook 'elpy-mode-hook 'flycheck-mode))
   (setq elpy-rpc-backend "jedi"))
 
+(when (maybe-require-package 'pyvenv)
+  (pyvenv-tracking-mode))
+
 ;; Emacs IPython Notebook EIN config
 (when (maybe-require-package 'ein)
-  ;; use autocompletion, but don't start to autocomplete after a dot
-  (setq ein:complete-on-dot -1)
   (setq ein:use-auto-complete t)
-  (setq ein:query-timeout 1000))
+  (setq ein:output-area-inlined-images t)
+  (setq ein:query-timeout 1000)
+  (add-hook 'ein:notebook-mode-hook 'turn-off-fci-mode))
 
 (when (maybe-require-package 'toml-mode)
   (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
