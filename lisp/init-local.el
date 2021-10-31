@@ -48,7 +48,7 @@
 ;; Set the default font
 (when (member "DejaVu Sans Mono" (font-family-list))
   (set-face-attribute 'default nil :font "DejaVu Sans Mono" :slant 'normal
-                      :weight 'normal :height 105 :width 'normal))
+                      :weight 'normal :height 110 :width 'normal))
 ;; specify font for all unicode characters
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
@@ -56,7 +56,16 @@
 ;; Increase the left fringe by 1px to properly show diff-hl mode markers in right window
 (add-to-list 'default-frame-alist '(left-fringe . 9))
 
+;; Set default org mode notes file
+(with-eval-after-load 'org
+  (setq org-default-notes-file "~/org/inbox.org"))
+
 ;; Select the displayed help window by default
 (setq help-window-select t)
+
+;; When BROWSER is defined, set the default browser
+(when (getenv "BROWSER")
+  (setq browse-url-generic-program (executable-find (getenv "BROWSER"))
+        browse-url-browser-function 'browse-url-generic))
 
 (provide 'init-local)
