@@ -26,14 +26,19 @@
 (when (maybe-require-package 'ein)
   (setq ein:use-auto-complete t)
   (setq ein:output-area-inlined-images t)
-  (setq ein:query-timeout 1000)
-  (add-hook 'ein:notebook-mode-hook 'turn-off-fci-mode))
+  (setq ein:query-timeout 1500)
+  (add-hook 'ein:notebook-mode-hook 'turn-off-fci-mode)
+  )
 
 (when (maybe-require-package 'toml-mode)
   (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
 
 (when (maybe-require-package 'reformatter)
   (reformatter-define black :program "black"))
+
+(when (maybe-require-package 'sphinx-doc)
+  (add-hook 'python-mode-hook
+            (lambda () (sphinx-doc-mode t))))
 
 (provide 'init-python)
 ;;; init-python.el ends here

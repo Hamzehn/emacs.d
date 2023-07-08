@@ -4,14 +4,33 @@
 
 ;; Solaire mode must be activated before loading themes
 (require-package 'solaire-mode)
+(solaire-global-mode +1)
 ;; Ensure solaire-mode is running in all solaire-mode buffers
-(add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
+;;(add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
+
 ;; if you use auto-revert-mode, this prevents solaire-mode from turning
 ;; itself off every time Emacs reverts the file
 (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+
 ;; To enable solaire-mode unconditionally for certain modes:
 (add-hook 'ediff-prepare-buffer-hook #'turn-on-solaire-mode)
-(solaire-global-mode +1)
+
+;; Turn off Solaire mode in EIN Notebooks (it doesn't treat EIN notebook cells
+;; as real code areas.
+(add-hook 'ein:notebook-mode-hook #'turn-off-solaire-mode)
+(add-hook 'ein:notebook-mode-hook
+          (lambda ()
+            (face-remap-add-relative 'default :background "#2A2E38")))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ein:cell-input-area ((t (:extend t :background "#2A2E38"))))
+ '(ein:cell-code-input-area ((t (:inherit ein:cell-input-area :background "#242730"))))
+ '(ein:cell-code-input-prompt ((t (:inherit font-lock-builtin-face :underline t :height 0.8))))
+ '(ein:cell-markdown-input-prompt ((t (:inherit ein:markdown-markup-face :underline t :height 0.7)))))
 
 ;; Now we can load our theme (Doom)
 (require-package 'doom-themes)

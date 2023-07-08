@@ -68,4 +68,7 @@
   (setq browse-url-generic-program (executable-find (getenv "BROWSER"))
         browse-url-browser-function 'browse-url-generic))
 
+;; Install yasnippet-snippets
+(require-package 'yasnippet-snippets)
+
 (provide 'init-local)
