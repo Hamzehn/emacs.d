@@ -41,11 +41,13 @@
       (setq kind-icon-default-face 'corfu-default)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 
+  ;; Disable auto completion in eshell and shell modes
   (with-eval-after-load 'eshell
     (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil))))
+  (with-eval-after-load 'shell
+    (add-hook 'shell-mode-hook (lambda () (setq-local corfu-auto nil))))
 
   (add-hook 'after-init-hook 'global-corfu-mode))
-
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
