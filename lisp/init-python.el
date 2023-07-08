@@ -10,13 +10,12 @@
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "--simple-prompt -i")
 
+(require-package 'pip-requirements)
+
 ;; Use Elpy for Python (alternative would be anaconda-mode)
 (when (maybe-require-package 'elpy)
   (elpy-enable)
   (setq elpy-rpc-virtualenv-path 'default)
-  (when (maybe-require-package 'flycheck)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
   (setq elpy-rpc-backend "jedi"))
 
 (when (maybe-require-package 'pyvenv)
@@ -34,7 +33,7 @@
   (add-to-list 'auto-mode-alist '("poetry\\.lock\\'" . toml-mode)))
 
 (when (maybe-require-package 'reformatter)
-  (reformatter-define black :program "black"))
+  (reformatter-define black :program "black" :args '("-")))
 
 (when (maybe-require-package 'sphinx-doc)
   (add-hook 'python-mode-hook

@@ -5,7 +5,6 @@
 (maybe-require-package 'coffee-mode)
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
-(maybe-require-package 'lsp-mode)
 (maybe-require-package 'prettier-js)
 (maybe-require-package 'rjsx-mode)
 (maybe-require-package 'typescript-mode)
@@ -76,8 +75,6 @@
 ;; In Emacs >= 25, the following is an alias for js-indent-level anyway
 (setq-default js2-basic-offset 2)
 
-
-
 (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
 
 (with-eval-after-load 'js2-mode
@@ -140,11 +137,6 @@
   (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode))
     (add-hook (derived-mode-hook-name mode) 'add-node-modules-path)))
 
-
-(when (maybe-require-package 'lsp-mode)
-  (add-hook 'js2-mode-hook #'lsp)
-  (add-hook 'coffee-mode-hook #'lsp)
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 (provide 'init-javascript)
 ;;; init-javascript.el ends here

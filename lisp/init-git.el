@@ -12,10 +12,10 @@
 (when (maybe-require-package 'git-timemachine)
   (global-set-key (kbd "C-x v t") 'git-timemachine-toggle))
 
-
+(require-package 'git-link)
 
 (when (maybe-require-package 'magit)
-  (setq-default magit-diff-refine-hunk t)
+  (setq-default magit-diff-refine-hunk 'all)
   (setq magit-ediff-dwim-show-on-hunks t)
 
   ;; Hint: customize `magit-repository-directories' so that you can use C-u M-F12 to
