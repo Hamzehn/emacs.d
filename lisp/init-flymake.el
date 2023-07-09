@@ -10,16 +10,43 @@
   (with-eval-after-load 'flycheck
     (setq-default flycheck-disabled-checkers
                   (append (default-value 'flycheck-disabled-checkers)
-                          '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package))))
+                          '(emacs-lisp
+                            emacs-lisp-checkdoc
+                            emacs-lisp-package
+                            javascript-jshint
+                            javascript-eslint
+                            ))))
 
   (defun sanityinc/enable-flymake-flycheck ()
     (setq-local flymake-diagnostic-functions
                 (append flymake-diagnostic-functions
-                        (flymake-flycheck-all-chained-diagnostic-functions))))
+                        (flymake-flycheck-all-chained-diagnostic-functions)))
+    (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake))
 
   (add-hook 'flymake-mode-hook 'sanityinc/enable-flymake-flycheck)
   (add-hook 'prog-mode-hook 'flymake-mode)
   (add-hook 'text-mode-hook 'flymake-mode))
+
+(when (maybe-require-package 'flymake-eslint)
+  ;; use local eslint from node_modules before global
+  (defun my/use-eslint-from-node-modules ()
+    (let* ((root
+            (locate-dominating-file
+             (or (buffer-file-name) default-directory)
+             "node_modules"))
+           (eslint
+            (and root (expand-file-name "node_modules/.bin/eslint" root))))
+      (when (and eslint (file-executable-p eslint))
+        (make-local-variable 'exec-path)
+        (push (file-name-concat root "node_modules" ".bin") exec-path)
+        (setq flymake-eslint-project-root root)
+        (flymake-eslint-enable))))
+  (add-hook
+   'js-mode-hook
+   ;; this is a workaround to a known eglot bug
+   ;; https://github.com/orzechowskid/flymake-eslint/issues/23
+   (lambda ()
+     (add-hook 'eglot-managed-mode-hook 'my/use-eslint-from-node-modules))))
 
 (with-eval-after-load 'flymake
   ;; Provide some flycheck-like bindings in flymake mode to ease transition
