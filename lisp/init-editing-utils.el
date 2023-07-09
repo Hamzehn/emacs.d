@@ -100,6 +100,23 @@
 
 
 
+(when (boundp 'display-fill-column-indicator)
+  (defun my/prog-mode-fci-settings ()
+    (setq-default indicate-buffer-boundaries 'left)
+    (setq-default display-fill-column-indicator-column 80)
+
+    ;; TODO: move this line to themes settings
+    (set-face-foreground 'fill-column-indicator (face-attribute 'line-number :foreground))
+
+    (display-fill-column-indicator-mode)
+    (when show-trailing-whitespace
+      (set (make-local-variable 'whitespace-style) '(face trailing))
+      (whitespace-mode 1)))
+
+  (add-hook 'prog-mode-hook 'my/prog-mode-fci-settings))
+
+
+
 (when (require-package 'rainbow-delimiters)
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
