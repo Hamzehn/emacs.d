@@ -7,7 +7,7 @@
 ;;; Code:
 
 ;; Produce backtraces when errors occur: can be helpful to diagnose startup issues
-;; (setq debug-on-error t)
+;;(setq debug-on-error t)
 
 (let ((minver "26.1"))
   (when (version< emacs-version minver)
@@ -52,6 +52,7 @@
 
 (require 'init-frame-hooks)
 (require 'init-xterm)
+(require 'init-themes)
 (require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-dired)
@@ -67,6 +68,7 @@
 (require 'init-hippie-expand)
 (require 'init-corfu)
 (require 'init-windows)
+(require 'init-sessions)
 (require 'init-mmm)
 
 (require 'init-editing-utils)
@@ -168,11 +170,6 @@
 
 ;; Allow users to provide an optional "init-local" containing personal settings
 (require 'init-local nil t)
-
-(require 'init-themes)
-;; Moved this to the end because it was causing startup errors regarding linum
-;; variables not being defined
-(require 'init-sessions)
 
 (provide 'init)
 
