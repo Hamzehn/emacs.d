@@ -16,18 +16,32 @@
 
 (when (maybe-require-package 'corfu)
   (setq-default corfu-auto t)
+  (with-eval-after-load 'eshell
+    (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil))))
+  (with-eval-after-load 'shell
+    (add-hook 'shell-mode-hook (lambda () (setq-local corfu-auto nil))))
+  (setq-default corfu-quit-no-match 'separator)
   (setq-default corfu-auto-prefix 2)
   (setq-default corfu-auto-delay 0.0)
   (setq-default corfu-quit-at-boundary t)
   (setq-default corfu-cycle nil)
-  (setq-default corfu-quit-no-match 'separator)
+  (add-hook 'after-init-hook 'global-corfu-mode)
 
   (with-eval-after-load 'corfu
     (face-spec-set 'corfu-current
-                   '((t (:inherit 'vertico-current :background nil))))
-    (corfu-popupinfo-mode)
-    (set-face-attribute 'corfu-popupinfo nil :height 0.8)
-    (corfu-history-mode 1))
+                   '((t (:inherit 'vertico-current :background nil)))))
+
+  (when (boundp 'corfu-popupinfo-mode)
+    (with-eval-after-load 'corfu
+      (corfu-popupinfo-mode 1)
+      (set-face-attribute 'corfu-popupinfo nil :height 0.8)
+      (setq corfu-popupinfo-delay (cons 1.0 1.0))))
+
+  (when (boundp 'corfu-history-mode)
+    (with-eval-after-load 'corfu
+      (corfu-history-mode 1)
+      (when (boundp savehist-mode)
+        (add-to-list 'savehist-additional-variables 'corfu-history))))
 
   (when (maybe-require-package 'kind-icon)
     (with-eval-after-load 'corfu
@@ -40,14 +54,7 @@
                :scale 1 ))
       (setq kind-icon-default-face 'corfu-default)
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
-
-  ;; Disable auto completion in eshell and shell modes
-  (with-eval-after-load 'eshell
-    (add-hook 'eshell-mode-hook (lambda () (setq-local corfu-auto nil))))
-  (with-eval-after-load 'shell
-    (add-hook 'shell-mode-hook (lambda () (setq-local corfu-auto nil))))
-
-  (add-hook 'after-init-hook 'global-corfu-mode))
+  )
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
