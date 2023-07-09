@@ -107,8 +107,9 @@
 
     ;; TODO: move this line to themes settings
     (set-face-foreground 'fill-column-indicator (face-attribute 'line-number :foreground))
+    (setq-default display-fill-column-indicator-character ?\u2502)
 
-    (display-fill-column-indicator-mode)
+    (display-fill-column-indicator-mode 1)
     (when show-trailing-whitespace
       (set (make-local-variable 'whitespace-style) '(face trailing))
       (whitespace-mode 1)))
