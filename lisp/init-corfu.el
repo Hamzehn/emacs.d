@@ -39,10 +39,10 @@
       (setq corfu-popupinfo-delay (cons 1.0 1.0))))
 
   (when (boundp 'corfu-history-mode)
+    (with-eval-after-load 'savehist
+        (add-to-list 'savehist-additional-variables 'corfu-history))
     (with-eval-after-load 'corfu
-      (corfu-history-mode 1)
-      (when (boundp savehist-mode)
-        (add-to-list 'savehist-additional-variables 'corfu-history))))
+      (corfu-history-mode 1)))
 
   (when (maybe-require-package 'kind-icon)
     (with-eval-after-load 'corfu
