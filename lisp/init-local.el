@@ -67,4 +67,7 @@
   (setq browse-url-generic-program (executable-find (getenv "BROWSER"))
         browse-url-browser-function 'browse-url-generic))
 
+;; Suppress native compilation warnings
+(setq native-comp-async-report-warnings-errors 'silent)
+
 (provide 'init-local)
