@@ -33,6 +33,9 @@
 (when (maybe-require-package 'doom-themes)
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t)
+  (setq doom-one-brighter-comments nil
+        doom-one-brighter-modeline t
+        doom-one-padded-modeline nil)
   (setq doom-vibrant-brighter-comments nil
         doom-vibrant-brighter-modeline t
         doom-vibrant-padded-modeline nil)
@@ -48,17 +51,14 @@
 (defvar my/default-theme my/dark-theme)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes (list my/default-theme))
+(custom-set-variables `(custom-enabled-themes (list my/default-theme)))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
   "Forcibly load the themes listed in `custom-enabled-themes'."
   (dolist (theme custom-enabled-themes)
-    (unless (custom-theme-p theme)
-      (load-theme theme)))
+    (load-theme theme))
   (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
-
-(add-hook 'after-init-hook 'reapply-themes)
 
 
 
@@ -68,7 +68,7 @@
   "Activate a light color theme."
   (interactive)
   (disable-theme my/dark-theme) ; to force restore unspecified face attributes
-  (setq custom-enabled-themes (list my/light-theme))
+  (custom-set-variables `(custom-enabled-themes (list my/light-theme)))
   (reapply-themes)
   (set-mouse-color "dim grey"))
 
@@ -76,12 +76,14 @@
   "Activate a dark color theme."
   (interactive)
   (disable-theme my/light-theme) ; to force restore unspecified face attributes
-  (setq custom-enabled-themes (list my/dark-theme))
+  (custom-set-variables `(custom-enabled-themes (list my/dark-theme)))
   (reapply-themes)
   (set-mouse-color "dark grey"))
 
+(setq my/default-theme-mode 'dark)
+(add-hook 'after-init-hook my/default-theme-mode)
+
 (when (maybe-require-package 'dimmer)
-  (setq-default dimmer-fraction 0.15)
   (add-hook 'after-init-hook 'dimmer-mode)
   (with-eval-after-load 'dimmer
     ;; TODO: file upstream as a PR
