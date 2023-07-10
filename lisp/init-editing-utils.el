@@ -105,7 +105,6 @@
     (setq-default indicate-buffer-boundaries 'left)
     (setq-default display-fill-column-indicator-column 80)
 
-    ;; TODO: move this line to themes settings
     (set-face-foreground 'fill-column-indicator (face-attribute 'line-number :foreground))
     (setq-default display-fill-column-indicator-character ?\u2502)
 
