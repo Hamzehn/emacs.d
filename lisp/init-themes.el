@@ -70,7 +70,7 @@
   (disable-theme my/dark-theme) ; to force restore unspecified face attributes
   (setq custom-enabled-themes (list my/light-theme))
   (reapply-themes)
-  )
+  (set-mouse-color "dim grey"))
 
 (defun dark ()
   "Activate a dark color theme."
@@ -78,7 +78,7 @@
   (disable-theme my/light-theme) ; to force restore unspecified face attributes
   (setq custom-enabled-themes (list my/dark-theme))
   (reapply-themes)
-  )
+  (set-mouse-color "dark grey"))
 
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
