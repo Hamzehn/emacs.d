@@ -4,34 +4,19 @@
 
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
-(maybe-require-package 'rjsx-mode)
 (maybe-require-package 'typescript-mode)
 (maybe-require-package 'prettier-js)
 
 
 ;;; Basic js-mode setup
 
-(defcustom preferred-javascript-mode
-  (cl-first (cl-remove-if-not #'fboundp '(rjsx-mode js2-mode js-mode)))
-  "Javascript mode to use for .js files."
-  :type 'symbol
-  :group 'programming
-  :options '(rjsx-mode js2-mode js-mode))
-
-;; Need to first remove from list if present, since elpa adds entries too, which
-;; may be in an arbitrary order
-
-(setq auto-mode-alist
-      (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
-            (cl-loop for entry in auto-mode-alist
-                     unless (eq preferred-javascript-mode (cdr entry))
-                     collect entry)))
-
+(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
 
 (with-eval-after-load 'js
   (sanityinc/major-mode-lighter 'js-mode "JS")
   (sanityinc/major-mode-lighter 'js-jsx-mode "JSX"))
 
+(setq-default js-jsx-syntax t)
 (setq-default js-indent-level 2)
 
 
