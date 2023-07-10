@@ -1,7 +1,6 @@
 ;; Themes
 
-;;(setenv "WORKON_HOME" "/opt/anaconda/envs")
-
+;; Set idle delay for eldoc-mode
 (with-eval-after-load 'eldoc-mode
   (defun my/eldoc-mode-hook ()
     (setq eldoc-idle-delay 0.5))
@@ -67,8 +66,5 @@
 (when (getenv "BROWSER")
   (setq browse-url-generic-program (executable-find (getenv "BROWSER"))
         browse-url-browser-function 'browse-url-generic))
-
-;; Install yasnippet-snippets
-(require-package 'yasnippet-snippets)
 
 (provide 'init-local)
