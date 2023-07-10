@@ -2,74 +2,61 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Solaire mode must be activated before loading themes
-(require-package 'solaire-mode)
-(solaire-global-mode +1)
-;; Ensure solaire-mode is running in all solaire-mode buffers
-;;(add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
+;;; Solaire mode must be activated before loading themes
+(when (maybe-require-package 'solaire-mode)
+  (solaire-global-mode +1)
+  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+  (add-hook 'ediff-prepare-buffer-hook #'turn-on-solaire-mode)
 
-;; if you use auto-revert-mode, this prevents solaire-mode from turning
-;; itself off every time Emacs reverts the file
-(add-hook 'after-revert-hook #'turn-on-solaire-mode)
+  ;; Turn off Solaire mode in EIN Notebooks
+  ;; (it doesn't treat EIN notebook cells as real code areas)
+  (when (boundp 'ein:notebook-mode-hook)
+    (add-hook 'ein:notebook-mode-hook #'turn-off-solaire-mode)
+    (add-hook 'ein:notebook-mode-hook
+              (lambda ()
+                (face-remap-add-relative 'default :background "#2A2E38")))
+    (set-face-attribute 'ein:cell-input-area nil
+                        :extend t
+                        :background "#2A2E38")
+    (set-face-attribute 'ein:cell-code-input-area nil
+                        :inherit ein:cell-input-area
+                        :background "#242730")
+    (set-face-attribute 'ein:cell-code-input-prompt nil
+                        :inherit font-lock-builtin-face
+                        :underline t
+                        :height 0.8)
+    (set-face-attribute 'ein:cell-markdown-input-prompt nil
+                        :inherit ein:markdown-markup-face
+                        :underline t
+                        :height 0.7)))
 
-;; To enable solaire-mode unconditionally for certain modes:
-(add-hook 'ediff-prepare-buffer-hook #'turn-on-solaire-mode)
+(when (maybe-require-package 'doom-themes)
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (setq doom-vibrant-brighter-comments nil
+        doom-vibrant-brighter-modeline t
+        doom-vibrant-padded-modeline nil)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
 
-;; Turn off Solaire mode in EIN Notebooks (it doesn't treat EIN notebook cells
-;; as real code areas.
-(add-hook 'ein:notebook-mode-hook #'turn-off-solaire-mode)
-(add-hook 'ein:notebook-mode-hook
-          (lambda ()
-            (face-remap-add-relative 'default :background "#2A2E38")))
+;; Don't prompt to confirm theme safety. This avoids problems with
+;; first-time startup on Emacs > 26.3.
+(setq custom-safe-themes t)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ein:cell-input-area ((t (:extend t :background "#2A2E38"))))
- '(ein:cell-code-input-area ((t (:inherit ein:cell-input-area :background "#242730"))))
- '(ein:cell-code-input-prompt ((t (:inherit font-lock-builtin-face :underline t :height 0.8))))
- '(ein:cell-markdown-input-prompt ((t (:inherit ein:markdown-markup-face :underline t :height 0.7)))))
-
-;; Now we can load our theme (Doom)
-(require-package 'doom-themes)
+(defvar my/dark-theme 'doom-vibrant)
+(defvar my/light-theme 'doom-solarized-light)
+(defvar my/default-theme my/dark-theme)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(doom-vibrant))
+(setq-default custom-enabled-themes (list my/default-theme))
 
-;; Global settings (defaults)
-(setq doom-themes-enable-bold t     ; if nil, bold is universally disabled
-      doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-;; Enable brighter comments
-(setq doom-one-brighter-comments nil
-      doom-one-brighter-modeline t
-      doom-one-padded-modeline nil)
-(setq doom-one-light-brighter-comments nil
-      doom-one-light-brighter-modeline t
-      doom-one-light-padded-modeline nil)
-(setq doom-vibrant-brighter-comments nil
-      doom-vibrant-brighter-modeline t
-      doom-vibrant-padded-modeline nil)
-
-;; Enable flashing mode-line on errors
-(doom-themes-visual-bell-config)
-
-;; Corrects (and improves) org-mode's native fontification.
-(doom-themes-org-config)
-
-;;-----------------------------------------------------------------------------
-;; Toggle between light and dark
-;;-----------------------------------------------------------------------------
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
   "Forcibly load the themes listed in `custom-enabled-themes'."
   (dolist (theme custom-enabled-themes)
     (unless (custom-theme-p theme)
-      (load-theme theme t)))
-  (custom-set-variables `(custom-enabled-themes
-                          (quote ,custom-enabled-themes))))
+      (load-theme theme)))
+  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
 
 (add-hook 'after-init-hook 'reapply-themes)
 
@@ -80,19 +67,18 @@
 (defun light ()
   "Activate a light color theme."
   (interactive)
-  (setq custom-enabled-themes '(doom-one-light))
-  (set-mouse-color "dark grey")
+  (disable-theme my/dark-theme) ; to force restore unspecified face attributes
+  (setq custom-enabled-themes (list my/light-theme))
   (reapply-themes)
-  (solaire-mode-swap-bg))
+  )
 
 (defun dark ()
   "Activate a dark color theme."
   (interactive)
-  (setq custom-enabled-themes '(doom-vibrant))
-  (set-mouse-color "dark grey")
-  (reapply-themes))
-
-(add-hook 'after-init-hook 'dark)
+  (disable-theme my/light-theme) ; to force restore unspecified face attributes
+  (setq custom-enabled-themes (list my/dark-theme))
+  (reapply-themes)
+  )
 
 (when (maybe-require-package 'dimmer)
   (setq-default dimmer-fraction 0.15)
