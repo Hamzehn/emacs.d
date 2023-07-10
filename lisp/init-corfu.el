@@ -6,6 +6,7 @@
 ;; TODO Default sort order should place [a-z] before punctuation
 
 (setq tab-always-indent 'complete)
+(setq tab-first-completion 'word-or-paren-or-punct)
 (when (maybe-require-package 'orderless)
   (with-eval-after-load 'vertico
     (require 'orderless)
