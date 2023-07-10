@@ -26,7 +26,6 @@
   (setq ein:use-auto-complete t)
   (setq ein:output-area-inlined-images t)
   (setq ein:query-timeout 1500)
-  (add-hook 'ein:notebook-mode-hook 'turn-off-fci-mode)
   )
 
 (when (maybe-require-package 'toml-mode)
