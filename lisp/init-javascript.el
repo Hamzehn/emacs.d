@@ -2,12 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(maybe-require-package 'coffee-mode)
 (maybe-require-package 'json-mode)
 (maybe-require-package 'js2-mode)
-(maybe-require-package 'prettier-js)
 (maybe-require-package 'rjsx-mode)
 (maybe-require-package 'typescript-mode)
+(maybe-require-package 'prettier-js)
 
 
 ;;; Basic js-mode setup
@@ -22,19 +21,19 @@
 ;; Need to first remove from list if present, since elpa adds entries too, which
 ;; may be in an arbitrary order
 
-(setq auto-mode-alist (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
-                            (cl-loop for entry in auto-mode-alist
-                                     unless (eq preferred-javascript-mode (cdr entry))
-                                     collect entry)))
+(setq auto-mode-alist
+      (cons `("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . ,preferred-javascript-mode)
+            (cl-loop for entry in auto-mode-alist
+                     unless (eq preferred-javascript-mode (cdr entry))
+                     collect entry)))
 
-
-(add-to-list 'auto-mode-alist '("\\.\\(js\\|es6\\)\\(\\.erb\\)?\\'" . js-mode))
 
 (with-eval-after-load 'js
   (sanityinc/major-mode-lighter 'js-mode "JS")
   (sanityinc/major-mode-lighter 'js-jsx-mode "JSX"))
 
 (setq-default js-indent-level 2)
+
 
 
 ;; js2-mode
@@ -57,10 +56,6 @@
   (add-hook 'js2-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
 
   (js2-imenu-extras-setup))
-
-(setq-default js-indent-level 2)
-;; In Emacs >= 25, the following is an alias for js-indent-level anyway
-(setq-default js2-basic-offset 2)
 
 (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode))
 
@@ -118,6 +113,7 @@
   (with-eval-after-load 'skewer-mode
     (add-hook 'skewer-mode-hook
               (lambda () (inferior-js-keys-mode -1)))))
+
 
 
 (when (maybe-require-package 'add-node-modules-path)
