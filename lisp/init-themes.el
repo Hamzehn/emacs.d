@@ -85,17 +85,34 @@
 
 (when (maybe-require-package 'dimmer)
   (add-hook 'after-init-hook 'dimmer-mode)
+
+  (defun sanityinc/display-non-graphic-p ()
+    (not (display-graphic-p)))
+
+  ;; Keep the following advice function and corfu check until corfu
+  ;; support is added
+  (defun my/advise-dimmer-config-change-handler ()
+    (let ((ignore (cl-some (lambda (f) (and (fboundp f) (funcall f)))
+                           dimmer-prevent-dimming-predicates)))
+      (unless ignore
+        (when (fboundp 'dimmer-process-all)
+          (dimmer-process-all t)))))
+  (defun my/corfu-frame-p ()
+    (string-match-p "\\` \\*corfu" (buffer-name)))
+
   (with-eval-after-load 'dimmer
     ;; TODO: file upstream as a PR
-    (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all))))
-  (with-eval-after-load 'dimmer
+    (advice-add 'frame-set-background-mode :after (lambda (&rest args) (dimmer-process-all)))
+
     ;; Don't dim in terminal windows. Even with 256 colours it can
     ;; lead to poor contrast.  Better would be to vary dimmer-fraction
     ;; according to frame type.
-    (defun sanityinc/display-non-graphic-p ()
-      (not (display-graphic-p)))
-    (add-to-list 'dimmer-exclusion-predicates 'sanityinc/display-non-graphic-p)))
+    (add-to-list 'dimmer-prevent-dimming-predicates 'sanityinc/display-non-graphic-p)
 
+    ;; Keep this until corfu support is built-in
+    (advice-add 'dimmer-config-change-handler :override 'my/advise-dimmer-config-change-handler)
+    (add-to-list 'dimmer-prevent-dimming-predicates 'my/corfu-frame-p)
+    ))
 
 (provide 'init-themes)
 ;;; init-themes.el ends here
