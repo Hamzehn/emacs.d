@@ -89,6 +89,8 @@
   (defun sanityinc/display-non-graphic-p ()
     (not (display-graphic-p)))
 
+  (dimmer-configure-magit)
+
   ;; Keep the following advice function and corfu check until corfu
   ;; support is added
   (defun my/advise-dimmer-config-change-handler ()
