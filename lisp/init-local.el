@@ -49,6 +49,14 @@
 ;; Increase the left fringe by 1px to properly show diff-hl mode markers in right window
 (add-to-list 'default-frame-alist '(left-fringe . 9))
 
+(add-hook
+ 'my/after-load-theme-hook
+ (lambda ()
+   ;; Set the color of the vertical divider to the same color as the mode line
+   (set-face-attribute 'vertical-border nil :foreground (face-background 'mode-line))
+   ;; Make the inactive mode lines slightly more visible by adding a border
+   (set-face-attribute 'mode-line-inactive nil :overline (face-background 'mode-line))))
+
 ;; Set default org mode notes file
 (with-eval-after-load 'org
   (setq org-default-notes-file "~/org/inbox.org"))
