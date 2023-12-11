@@ -14,7 +14,8 @@
 
 (with-eval-after-load 'js
   (sanityinc/major-mode-lighter 'js-mode "JS")
-  (sanityinc/major-mode-lighter 'js-jsx-mode "JSX"))
+  (sanityinc/major-mode-lighter 'js-jsx-mode "JSX")
+  (add-hook 'js-mode-hook 'prettier-js-mode))
 
 (setq-default js-jsx-syntax t)
 (setq-default js-indent-level 2)
@@ -39,6 +40,7 @@
         (js2-minor-mode 1))))
   (add-hook 'js-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
   (add-hook 'js2-mode-hook 'sanityinc/enable-js2-checks-if-flycheck-inactive)
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
 
   (js2-imenu-extras-setup))
 
