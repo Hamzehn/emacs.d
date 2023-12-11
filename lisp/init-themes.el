@@ -116,5 +116,12 @@
     (add-to-list 'dimmer-prevent-dimming-predicates 'my/corfu-frame-p)
     ))
 
+;; Add my own hook to after a theme is loaded
+(defvar my/after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+(defadvice load-theme (after my/run-after-load-theme-hook last activate)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'my/after-load-theme-hook))
+
 (provide 'init-themes)
 ;;; init-themes.el ends here
