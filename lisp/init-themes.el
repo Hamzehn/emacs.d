@@ -46,24 +46,19 @@
 ;; first-time startup on Emacs > 26.3.
 (setq custom-safe-themes t)
 
+
+;; Set dark, light, and default themes
 (defvar my/dark-theme 'doom-vibrant)
 (defvar my/light-theme 'doom-solarized-light)
 (defvar my/default-theme my/dark-theme)
-
-;; If you don't customize it, this is the theme you get.
-(custom-set-variables `(custom-enabled-themes (list my/default-theme)))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
   "Forcibly load the themes listed in `custom-enabled-themes'."
   (dolist (theme custom-enabled-themes)
-    (load-theme theme))
-  (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+    (load-theme theme t)))
 
-
-
 ;; Toggle between light and dark
-
 (defun light ()
   "Activate a light color theme."
   (interactive)
@@ -80,9 +75,14 @@
   (reapply-themes)
   (set-mouse-color "dark grey"))
 
-(setq my/default-theme-mode 'dark)
-(add-hook 'after-init-hook my/default-theme-mode)
+;; Force load themes after init
+(add-hook 'after-init-hook
+          (lambda ()
+            (unless custom-enabled-themes
+              (custom-set-variables `(custom-enabled-themes (list my/default-theme))))
+            (reapply-themes)))
 
+
 (when (maybe-require-package 'dimmer)
   (add-hook 'after-init-hook 'dimmer-mode)
 

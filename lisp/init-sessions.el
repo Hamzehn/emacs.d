@@ -46,6 +46,7 @@
 (setq desktop-globals-to-save
       '((comint-input-ring        . 50)
         (compile-history          . 30)
+        (custom-enabled-themes    . 20)
         desktop-missing-file-warning
         (dired-regexp-history     . 20)
         (extended-command-history . 30)
