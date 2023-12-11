@@ -38,12 +38,6 @@
 ;; show the menu bar
 (menu-bar-mode 1)
 
-;; Setup frame size and windows
-(add-to-list 'default-frame-alist '(top . 40))
-(add-to-list 'default-frame-alist '(left . (+ 20)))
-(add-to-list 'default-frame-alist '(height . 56))
-(add-to-list 'default-frame-alist '(width . 200))
-
 ;; Set the default font
 (when (member "DejaVu Sans Mono" (font-family-list))
   (set-face-attribute 'default nil :font "DejaVu Sans Mono" :slant 'normal
